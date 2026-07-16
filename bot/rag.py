@@ -30,25 +30,40 @@ TOP_K = 6
 
 # Fuentes a ingestar. Agrega aquí los JSONL de las nuevas fuentes.
 FUENTES = [
-    RAIZ / "tupa_rag_pipeline_code" / "output_tupa" / "rag_ready" / "chunks_ready.jsonl",
+    # Unificado por el equipo: TUPA 2018 + orientación SUNAT scrapeada.
+    RAIZ / "tupa_rag_pipeline_code" / "output_tupa" / "rag_ready" / "chunks_ready_unified.jsonl",
 ]
 
 _openai = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 _chroma = chromadb.PersistentClient(path=CHROMA_DIR)
 
-SYSTEM_PROMPT = """Eres un asistente virtual que orienta a ciudadanos peruanos sobre los \
-procedimientos administrativos del TUPA de la SUNAT (Texto Único de Procedimientos Administrativos, 2018).
+SYSTEM_PROMPT = """# ROL
+Eres el asistente virtual tributario de la SUNAT (Perú). Atiendes por Telegram a contribuyentes \
+que consultan sobre trámites, comprobantes de pago, RUC, declaraciones, impuestos y demás \
+procedimientos tributarios.
 
-Reglas:
-1. Responde SOLO con la información del CONTEXTO. Si no está ahí, di claramente que no lo \
-encuentras en el TUPA y sugiere consultar sunat.gob.pe o la central 0-801-12-100.
-2. Nunca inventes requisitos, plazos, costos ni códigos de procedimiento.
-3. Cita siempre el código y nombre del procedimiento en el que te basas.
-4. Responde en español, claro y breve, con viñetas cuando haya requisitos o pasos.
-5. JAMÁS pidas al usuario su Clave SOL, contraseña, DNI, RUC, tarjeta ni ningún dato personal. \
-Si lo necesitara para un trámite, explica que ese dato se ingresa únicamente en los canales \
-oficiales de SUNAT, nunca en este chat.
-6. Máximo ~1500 caracteres (es un chat de Telegram)."""
+# PROBLEMA QUE RESUELVES
+Cada día miles de contribuyentes hacen consultas repetitivas que hoy los obligan a navegar por \
+documentación extensa y normativa compleja (el TUPA tiene cientos de procedimientos). Tu trabajo \
+es darles, en segundos y en lenguaje simple, la respuesta que tardarían en encontrar leyendo \
+resoluciones. Traduce la norma; no la copies.
+
+# CÓMO RESPONDES
+1. Responde SOLO con la información del CONTEXTO recuperado. Si no está ahí, dilo con claridad y \
+deriva a sunat.gob.pe o a la central 0-801-12-100. Nunca inventes requisitos, plazos, costos, \
+formularios ni códigos de procedimiento.
+2. Cita el código y nombre del procedimiento TUPA en el que te basas.
+3. Español claro y directo, sin jerga legal innecesaria. Viñetas para requisitos y pasos.
+4. Ve al grano: el ciudadano quiere saber qué hacer, dónde y con qué. Máximo ~1500 caracteres \
+(es un chat de Telegram).
+5. Si hay PERFIL DEL CONTRIBUYENTE, personaliza con él (su régimen, actividad, estado) pero solo \
+si es pertinente a lo que pregunta. No se lo recites si no viene al caso.
+
+# SEGURIDAD (INNEGOCIABLE)
+JAMÁS pidas ni aceptes la Clave SOL, contraseñas, PIN, códigos de verificación, DNI, tarjetas ni \
+cuentas bancarias. Si un trámite los requiere, explica que esos datos se ingresan ÚNICAMENTE en \
+los canales oficiales de SUNAT, nunca en este chat. Recuerda que SUNAT jamás pide la Clave SOL \
+por chat, correo ni teléfono."""
 
 
 def _embed(textos: list[str]) -> list[list[float]]:
@@ -170,19 +185,30 @@ def _formatear_contexto(hits: list[dict]) -> str:
     return "\n\n---\n\n".join(partes)
 
 
-def responder(pregunta: str, historial: list[dict] | None = None) -> str:
-    """Pregunta -> respuesta con citas. Asume que el escudo ya aprobó el texto."""
+def responder(
+    pregunta: str,
+    historial: list[dict] | None = None,
+    perfil_kyb: str | None = None,
+) -> str:
+    """Pregunta -> respuesta con citas. Asume que el escudo ya aprobó el texto.
+
+    `perfil_kyb` es el resumen del 8B (ver bot/latinfo.py); se inyecta en cada
+    turno para personalizar sin re-consultar la API.
+    """
     hits = recuperar(pregunta)
     if not hits:
         return ("No encontré información sobre eso en el TUPA de SUNAT. "
                 "Te sugiero revisar sunat.gob.pe o llamar al 0-801-12-100.")
 
+    bloques = []
+    if perfil_kyb:
+        bloques.append(f"PERFIL DEL CONTRIBUYENTE (datos públicos SUNAT/OSCE/OEFA/SEACE):\n{perfil_kyb}")
+    bloques.append(f"CONTEXTO RECUPERADO DEL TUPA:\n{_formatear_contexto(hits)}")
+    bloques.append(f"PREGUNTA DEL CIUDADANO: {pregunta}")
+
     mensajes = [{"role": "system", "content": SYSTEM_PROMPT}]
     mensajes += (historial or [])[-4:]
-    mensajes.append({
-        "role": "user",
-        "content": f"CONTEXTO:\n{_formatear_contexto(hits)}\n\nPREGUNTA DEL CIUDADANO: {pregunta}",
-    })
+    mensajes.append({"role": "user", "content": "\n\n".join(bloques)})
 
     r = _openai.chat.completions.create(
         model=MODELO_CHAT, messages=mensajes, temperature=0.2, max_tokens=700

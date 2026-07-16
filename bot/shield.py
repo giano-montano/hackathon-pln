@@ -160,8 +160,9 @@ def _detectar(texto: str) -> list[str]:
     #    cambian al normalizar, pero el leet sí ensuciaría los conteos).
     solo_digitos = re.sub(r"[ \-]", "", texto)
 
-    if _RUC.search(solo_digitos):
-        motivos.append("ruc")
+    # El RUC NO se bloquea: es el identificador público de empresa que el bot
+    # necesita para consultar Latinfo, y SUNAT lo publica abiertamente.
+    # (Decisión de producto; la Clave SOL sigue siendo bloqueo absoluto.)
     if _CCI.search(solo_digitos):
         motivos.append("cuenta_bancaria")
 
@@ -174,9 +175,9 @@ def _detectar(texto: str) -> list[str]:
     if _CELULAR.search(texto):
         motivos.append("celular")
 
-    # El DNI se revisa al final: 8 dígitos aislados que no sean parte de un
-    # RUC/CCI ya detectado.
-    if "ruc" not in motivos and "cuenta_bancaria" not in motivos and _DNI.search(solo_digitos):
+    # El DNI se revisa al final: 8 dígitos aislados que no sean parte de una
+    # cuenta ya detectada.
+    if "cuenta_bancaria" not in motivos and _DNI.search(solo_digitos):
         motivos.append("dni")
 
     if _EMAIL.search(texto):
