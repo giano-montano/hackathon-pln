@@ -136,6 +136,10 @@ class UrlFilter:
         return FilterResult(canon, False, "default_reject", REASON_EXCLUDED)
 
 
+    def same_domain(self, url: str) -> bool:
+        """True si la URL pertenece al dominio de la fuente."""
+        return urlsplit(canonicalize(url)).netloc == self.source.domain.lower()
+
     def followable(self, url: str) -> bool:
         """True si la pagina se puede VISITAR para descubrir enlaces.
 

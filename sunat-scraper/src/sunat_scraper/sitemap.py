@@ -151,29 +151,34 @@ def extract_links(html: str, base_url: str) -> list[str]:
 def discover_links(
     start_urls: list[str],
     fetch_html: HtmlFetcher,
-    accept: UrlPredicate,
     follow: UrlPredicate,
+    candidate: UrlPredicate,
     max_pages: int = MAX_CRAWL_PAGES,
     max_depth: int = MAX_DEPTH,
 ) -> list[DiscoveredUrl]:
     """Recorrido en anchura desde `start_urls`, acotado por paginas y profundidad.
 
-    `accept` decide que URLs se registran; `follow`, cuales se visitan. Son
-    distintas a proposito: una pagina indice se visita pero no se registra.
+    Devuelve TODAS las URLs candidatas que vio, aceptadas o no: filtrar es tarea
+    de quien llama, igual que con un sitemap. Asi el dry-run puede informar de lo
+    rechazado y de la regla aplicada.
+
+    `candidate` decide que URLs se reportan (normalmente, las del dominio);
+    `follow`, cuales se visitan. Son distintas a proposito: una pagina indice se
+    visita aunque su contenido no sirva, y una rama excluida no se visita.
     """
     pending: list[tuple[str, int]] = [(url, 0) for url in start_urls]
     visited: set[str] = set()
-    recorded: dict[str, DiscoveredUrl] = {}
+    seen: dict[str, DiscoveredUrl] = {}
     fetched = 0
 
-    def record(url: str) -> None:
-        # Para decidir basta la URL: registrar no requiere descargar la pagina.
-        # Asi un presupuesto pequeno de descargas no tira URLs ya conocidas.
-        if accept(url):
-            recorded.setdefault(url, DiscoveredUrl(loc=url))
+    def remember(url: str) -> None:
+        # Reportar no requiere descargar: basta con haber visto el enlace. Asi un
+        # presupuesto pequeno de descargas no tira URLs ya conocidas.
+        if candidate(url):
+            seen.setdefault(url, DiscoveredUrl(loc=url))
 
     for url in start_urls:
-        record(url)
+        remember(url)
 
     while pending and fetched < max_pages:
         current, depth = pending.pop(0)
@@ -187,8 +192,8 @@ def discover_links(
             continue
 
         for link in extract_links(html, current):
-            record(link)
+            remember(link)
             if link not in visited:
                 pending.append((link, depth + 1))
 
-    return list(recorded.values())
+    return list(seen.values())

@@ -102,7 +102,8 @@ def test_rss_fallback_url():
 # -- recorrido de enlaces (fuentes sin sitemap) -----------------------------
 
 PAGINAS = {
-    f"{BASE}/": '<a href="/ruc-personas">RUC</a> <a href="/aduanas">Aduanas</a> <a href="/indice">Índice</a>',
+    f"{BASE}/": '<a href="/ruc-personas">RUC</a> <a href="/aduanas">Aduanas</a> <a href="/indice">Índice</a>'
+                ' <a href="https://www.facebook.com/sunat">Facebook</a>',
     f"{BASE}/indice": '<a href="/gradualidad">Gradualidad</a> <a href="/manual.pdf">PDF</a>',
     f"{BASE}/ruc-personas": '<a href="/">Inicio</a>',
     f"{BASE}/gradualidad": '<a href="/ruc-personas">RUC</a>',
@@ -129,7 +130,11 @@ def test_extract_links_quita_el_fragmento_y_no_repite():
     assert sitemap.extract_links(html, BASE) == [f"{BASE}/uno"]
 
 
-def test_discover_links_registra_solo_lo_aceptado(config):
+def test_discover_links_devuelve_los_candidatos_del_dominio(config):
+    """Devuelve lo que vio, aceptado o no: filtrar es tarea de quien llama.
+
+    Igual que con un sitemap, asi el dry-run puede informar de lo rechazado.
+    """
     from sunat_scraper.filters import filter_for
 
     url_filter = filter_for(config, "orientacion")
@@ -137,16 +142,34 @@ def test_discover_links_registra_solo_lo_aceptado(config):
     found = sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch_pagina,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
     )
     locs = {u.loc for u in found}
 
-    assert f"{BASE}/ruc-personas" in locs      # aceptada por prefijo
-    assert f"{BASE}/gradualidad" in locs       # aceptada por patron, a 2 saltos
-    assert f"{BASE}/" not in locs              # indice: se visita, no se registra
-    assert f"{BASE}/aduanas" not in locs       # excluida por regla
-    assert f"{BASE}/manual.pdf" not in locs    # PDF
+    assert f"{BASE}/ruc-personas" in locs                 # se aceptara por prefijo
+    assert f"{BASE}/gradualidad" in locs                  # se aceptara por patron, a 2 saltos
+    assert f"{BASE}/aduanas" in locs                      # se rechazara: el filtro lo dira
+    assert "https://www.facebook.com/sunat" not in locs   # otro dominio: no es candidata
+
+
+def test_el_filtro_decide_sobre_los_candidatos_descubiertos(config):
+    """Las URLs descubiertas pasan por el mismo filtro que las de un sitemap."""
+    from sunat_scraper.filters import filter_for
+
+    url_filter = filter_for(config, "orientacion")
+
+    found = sitemap.discover_links(
+        start_urls=[f"{BASE}/"],
+        fetch_html=fetch_pagina,
+        follow=url_filter.followable,
+        candidate=url_filter.same_domain,
+    )
+    decisiones = {u.loc: url_filter.decide(u.loc) for u in found}
+
+    assert decisiones[f"{BASE}/ruc-personas"].accepted
+    assert not decisiones[f"{BASE}/aduanas"].accepted
+    assert decisiones[f"{BASE}/aduanas"].reason == "excluded_by_rule"
 
 
 def test_discover_links_no_recorre_las_ramas_excluidas(config):
@@ -163,8 +186,8 @@ def test_discover_links_no_recorre_las_ramas_excluidas(config):
     sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
     )
 
     assert f"{BASE}/aduanas" not in visitadas
@@ -183,8 +206,8 @@ def test_discover_links_respeta_el_limite_de_paginas(config):
     sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
         max_pages=2,
     )
 
@@ -203,8 +226,8 @@ def test_el_limite_de_paginas_no_descarta_urls_ya_vistas_en_los_enlaces(config):
     found = sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch_pagina,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
         max_pages=1,
     )
 
@@ -225,8 +248,8 @@ def test_discover_links_no_entra_en_bucle(config):
     sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
     )
 
     assert len(visitadas) == len(set(visitadas))
@@ -240,8 +263,8 @@ def test_discover_links_respeta_la_profundidad(config):
     found = sitemap.discover_links(
         start_urls=[f"{BASE}/"],
         fetch_html=fetch_pagina,
-        accept=lambda u: url_filter.decide(u).accepted,
         follow=url_filter.followable,
+        candidate=url_filter.same_domain,
         max_depth=1,
     )
     locs = {u.loc for u in found}

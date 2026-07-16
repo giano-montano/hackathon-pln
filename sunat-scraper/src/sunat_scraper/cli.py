@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from collections import Counter
 from pathlib import Path
@@ -122,8 +123,8 @@ def _discover_source(
         found = sitemap.discover_links(
             start_urls=start,
             fetch_html=fetch_html,
-            accept=lambda u: url_filter.decide(u).accepted,
             follow=url_filter.followable,
+            candidate=url_filter.same_domain,
             max_pages=budget,
             max_depth=source.crawl_max_depth,
         )
@@ -404,8 +405,6 @@ def _run_process(config: Config, base: Path, source: str | None, max_pages: int 
 
 
 def _read_discovery(base: Path) -> dict:
-    import json
-
     path = base / DISCOVERY_FILE
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))

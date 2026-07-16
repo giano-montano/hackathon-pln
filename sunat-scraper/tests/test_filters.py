@@ -22,7 +22,7 @@ def url_filter(config):
     [
         (f"{BASE}/ruc-personas/", f"{BASE}/ruc-personas"),
         (f"{BASE}/ruc-personas#seccion", f"{BASE}/ruc-personas"),
-        (f"HTTPS://Orientacion.SUNAT.gob.PE/ruc-personas", f"{BASE}/ruc-personas"),
+        ("HTTPS://Orientacion.SUNAT.gob.PE/ruc-personas", f"{BASE}/ruc-personas"),
         (f"{BASE}/ruc-personas?utm_source=google&utm_campaign=x", f"{BASE}/ruc-personas"),
         (f"{BASE}/ruc-personas?id=2&a=1", f"{BASE}/ruc-personas?a=1&id=2"),
     ],
