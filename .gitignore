@@ -53,3 +53,9 @@ logs/
 .idea/
 *.swp
 *.swo
+
+.venv
+.venv/
+
+# Vector store local
+chroma_db/
