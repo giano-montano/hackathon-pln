@@ -10,11 +10,13 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 
 import chromadb
 from dotenv import load_dotenv
 from openai import OpenAI
+from rank_bm25 import BM25Okapi
 
 load_dotenv()
 
@@ -52,6 +54,10 @@ oficiales de SUNAT, nunca en este chat.
 def _embed(textos: list[str]) -> list[list[float]]:
     resp = _openai.embeddings.create(model=MODELO_EMBED, input=textos)
     return [d.embedding for d in resp.data]
+
+
+def _tokenizar(texto: str) -> list[str]:
+    return re.findall(r"[a-záéíóúñü0-9\.]+", texto.lower())
 
 
 def _plano(metadata: dict) -> dict:
@@ -102,16 +108,55 @@ def _coleccion():
     return _chroma.get_collection(COLECCION)
 
 
+_bm25_cache: tuple[BM25Okapi, list[dict]] | None = None
+
+
+def _bm25():
+    """Índice BM25 sobre el mismo corpus, cargado desde Chroma una sola vez."""
+    global _bm25_cache
+    if _bm25_cache is None:
+        datos = _coleccion().get(include=["documents", "metadatas"])
+        corpus = [
+            {"texto": d, "metadata": m}
+            for d, m in zip(datos["documents"], datos["metadatas"])
+        ]
+        _bm25_cache = (BM25Okapi([_tokenizar(c["texto"]) for c in corpus]), corpus)
+    return _bm25_cache
+
+
 def recuperar(pregunta: str, k: int = TOP_K) -> list[dict]:
+    """Recuperación híbrida: densa (ONNX) + léxica (BM25), fusionadas con RRF.
+
+    RRF (Reciprocal Rank Fusion) combina ambos rankings sin tener que
+    normalizar puntajes de escalas distintas.
+    """
+    puntajes: dict[str, float] = {}
+    docs: dict[str, dict] = {}
+    C = 60  # constante estándar de RRF
+
+    # Rama densa
     res = _coleccion().query(
         query_embeddings=_embed([pregunta]),
-        n_results=k,
-        include=["documents", "metadatas", "distances"],
+        n_results=k * 3,
+        include=["documents", "metadatas"],
     )
-    return [
-        {"texto": d, "metadata": m, "distancia": dist}
-        for d, m, dist in zip(res["documents"][0], res["metadatas"][0], res["distances"][0])
-    ]
+    for rank, (d, m) in enumerate(zip(res["documents"][0], res["metadatas"][0])):
+        puntajes[d] = puntajes.get(d, 0) + 1 / (C + rank)
+        docs[d] = {"texto": d, "metadata": m}
+
+    # Rama léxica
+    bm25, corpus = _bm25()
+    tokens = _tokenizar(pregunta)
+    if tokens:
+        scores = bm25.get_scores(tokens)  # una sola vez: es O(corpus) por llamada
+        mejores = sorted(range(len(corpus)), key=lambda i: scores[i], reverse=True)[: k * 3]
+        for rank, i in enumerate(mejores):
+            d = corpus[i]["texto"]
+            puntajes[d] = puntajes.get(d, 0) + 1 / (C + rank)
+            docs.setdefault(d, corpus[i])
+
+    orden = sorted(puntajes, key=puntajes.get, reverse=True)[:k]
+    return [{**docs[d], "score": puntajes[d]} for d in orden]
 
 
 def _formatear_contexto(hits: list[dict]) -> str:
