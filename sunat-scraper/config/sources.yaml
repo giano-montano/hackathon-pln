@@ -1,0 +1,230 @@
+# Configuracion de fuentes del scraper.
+#
+# Orden de decision para cada URL (ver src/sunat_scraper/filters.py):
+#   1. Formato no HTML (.pdf, .docx, .xlsx, imagenes, video) -> rechazo
+#   2. Dominio distinto al de la fuente                      -> rechazo
+#   3. exclude_patterns (de la fuente + globales)            -> rechazo
+#   4. include_urls (ruta exacta)                            -> aceptacion
+#   5. include_prefixes (la ruta empieza con)                -> aceptacion
+#   6. include_patterns (subcadena en la URL)                -> aceptacion
+#   7. Rechazo por defecto
+#
+# Para agregar una fuente nueva no hace falta tocar el codigo: basta con
+# anadir un bloque a `sources`. Ver README.md.
+
+defaults:
+  user_agent: "sunat-scraper/0.1 (+corpus RAG educativo; contacto: tu-correo@ejemplo.pe)"
+  timeout: 30                 # segundos por peticion
+  requests_per_second: 1.0    # maximo de solicitudes por segundo
+  max_retries: 3              # reintentos con backoff exponencial
+  respect_robots: true        # respeta robots.txt (no desactivar sin permiso del sitio)
+  min_text_chars: 400         # menos que esto -> insufficient_text
+  max_link_ratio: 0.5         # mas enlaces que prosa -> insufficient_text
+  chunk_min_words: 250
+  chunk_max_words: 450
+  chunk_overlap_words: 40
+
+# Patrones excluidos en TODAS las fuentes: zonas autenticadas, buscadores,
+# tramites en linea y datos dinamicos (estado de RUC, deudas, cronogramas).
+# Estos ultimos no deben entrar al corpus: se consultan por API (ver ruc_provider.py).
+global_exclude_patterns:
+  - /user/login
+  - /user/password
+  - sunat-operaciones-en-linea
+  - operaciones-en-linea
+  - /sol/
+  - clave-sol-login
+  - menu-sol
+  - /search
+  - /buscar
+  - busqueda
+  - /node/
+  - /taxonomy/
+  - /views/ajax
+  - /rss
+  - /feed
+  - /print/
+  - consulta-ruc
+  - consulta-de-ruc
+  - ficha-ruc
+  - consulta-de-deuda
+  - estado-de-tramite
+  - /noticias
+  - /eventos
+  - /videos
+
+sources:
+  - name: orientacion
+    domain: orientacion.sunat.gob.pe
+    # Verificado el 2026-07-16: este sitio NO publica sitemap (/sitemap.xml
+    # devuelve 404 y /rss.xml esta vacio). Se deja declarado porque el codigo lo
+    # prefiere en cuanto exista; mientras tanto se recorren los enlaces.
+    sitemap: https://orientacion.sunat.gob.pe/sitemap.xml
+    crawl_links: true
+    crawl_max_pages: 400
+    crawl_max_depth: 3
+    default_audience: todas
+    default_topic: otros
+
+    include_prefixes:
+      - /ruc-personas
+      - /comprobantes-de-pago
+      - /declaracion-y-pago-personas1
+      - /impuesto-a-la-renta-personas
+      - /ruc-empresas
+      - /comprobantes-de-pago-empresas
+      - /declaracion-y-pago-empresas
+      - /igv-e-isc
+      - /impuesto-a-la-renta---empresas1
+
+    include_urls:
+      - /01-inscripcion-en-el-ruc
+      - /02-obtencion-de-clave-sol
+      - /03-actualizacion-yo-modificacion-de-datos-en-el-ruc
+      - /04-manuales
+      - /mesa-de-partes-virtual
+      - /centro-de-servicios-virtual
+
+    include_patterns:
+      - preguntas-frecuentes
+      - multa-por
+      - gradualidad
+      - fraccionamiento
+      - devoluciones
+      - cobranza
+      - detracciones
+      - retenciones
+      - percepciones
+
+    exclude_patterns:
+      - aduana
+      - viajeros
+      - exporta-facil
+      - recursos-impugnatorios
+      - reclamacion
+      - apelacion
+      - juegos-a-distancia
+      - no-domiciliados
+      - embarcaciones
+      - impuesto-turistico
+      - repatriacion
+
+  - name: emprender
+    domain: emprender.sunat.gob.pe
+    # Verificado el 2026-07-16: tampoco publica sitemap (/sitemap.xml y /rss.xml
+    # devuelven 404).
+    sitemap: https://emprender.sunat.gob.pe/sitemap.xml
+    crawl_links: true
+    crawl_max_pages: 400
+    crawl_max_depth: 3
+    default_audience: emprendedor
+    default_topic: formalizacion
+
+    # Rutas reales del sitio: /ruc/, /comprobantes-libros/, /declaracion-pagos/,
+    # /principales-impuestos/, /acciones-contribuyente/, /acciones-sunat/.
+    include_prefixes:
+      - /ruc/
+      - /comprobantes
+      - /declaracion
+      - /principales-impuestos/
+      - /acciones-contribuyente/formalizacion/
+      - /acciones-sunat/facultad-sancionadora/
+      - /detracciones-operatividad
+
+    exclude_patterns:
+      - /videos/
+      - insumos-quimicos
+      - artistas-no-domiciliados
+      - eventos
+      - noticias
+
+  # Fuente sin sitemap: se alimenta de una lista manual de URLs HTML.
+  # Sirve de plantilla para paginas sueltas de www.sunat.gob.pe.
+  - name: sunat_www
+    domain: www.sunat.gob.pe
+    default_audience: todas
+    default_topic: otros
+
+    manual_urls: []
+    # Los cronogramas son datos dinamicos (fechas de vencimiento que cambian cada
+    # ano) y por diseno NO deben entrar a los embeddings. Se dejan comentados como
+    # ejemplo de la sintaxis; si los agregas, el corpus quedara desactualizado.
+    #   - https://www.sunat.gob.pe/orientacion/cronogramas/2026/cObligacionMensual2026.html
+
+    include_patterns:
+      - /orientacion/
+
+    exclude_patterns:
+      - /cronogramas/
+      - aduana
+
+# Reglas de clasificacion. Sin LLM: solo dominio, URL, titulo y breadcrumb.
+# El primer patron que coincide, gana (las reglas se evaluan en orden).
+classification:
+  # Cada regla: patrones buscados en la URL, el titulo o el breadcrumb.
+  audience_rules:
+    - audience: empresas
+      patterns:
+        - ruc-empresas
+        - comprobantes-de-pago-empresas
+        - declaracion-y-pago-empresas
+        - impuesto-a-la-renta---empresas
+        - personas juridicas
+        - persona juridica
+        - empresas
+    - audience: personas
+      patterns:
+        - ruc-personas
+        - declaracion-y-pago-personas
+        - impuesto-a-la-renta-personas
+        - personas naturales
+        - persona natural
+        - personas
+    - audience: emprendedor
+      patterns:
+        - emprender
+        - emprendedor
+        - mi empresa propia
+        - formalizacion
+
+  # Por dominio, cuando ninguna regla de arriba coincide.
+  audience_by_domain:
+    emprender.sunat.gob.pe: emprendedor
+
+  topic_rules:
+    - topic: clave_sol
+      patterns: [clave-sol, clave sol, menu sol, obtencion-de-clave]
+    - topic: recibos_honorarios
+      patterns: [recibo-por-honorarios, recibos-por-honorarios, recibo por honorarios, cuarta categoria, cuarta-categoria]
+    - topic: libros_electronicos
+      patterns: [libros-electronicos, libros y registros, ple, sire]
+    - topic: gradualidad
+      patterns: [gradualidad, regimen de gradualidad, subsanacion]
+    - topic: multas
+      patterns: [multa, multas, infraccion, infracciones, sancion, sanciones, facultad-sancionadora]
+    - topic: fraccionamiento
+      patterns: [fraccionamiento, aplazamiento, refinanciamiento]
+    - topic: devoluciones
+      patterns: [devolucion, devoluciones]
+    - topic: cobranza
+      patterns: [cobranza, coactiva, embargo]
+    - topic: detracciones
+      patterns: [detraccion, detracciones, spot]
+    - topic: retenciones
+      patterns: [retencion, retenciones]
+    - topic: percepciones
+      patterns: [percepcion, percepciones]
+    - topic: regimenes_tributarios
+      patterns: [regimen, regimenes, nuevo-rus, nrus, rer, rmt, mype tributario, regimen general]
+    - topic: igv
+      patterns: [igv, isc, impuesto general a las ventas, impuesto selectivo]
+    - topic: impuesto_renta
+      patterns: [impuesto-a-la-renta, impuesto a la renta, renta de primera, renta de segunda, renta de quinta]
+    - topic: comprobantes
+      patterns: [comprobante, comprobantes, factura, boleta, nota de credito, nota de debito, guia de remision]
+    - topic: declaraciones
+      patterns: [declaracion, declaraciones, declara facil, pdt, formulario virtual, declaracion-y-pago]
+    - topic: ruc
+      patterns: [ruc, registro unico de contribuyentes, domicilio fiscal, baja de inscripcion]
+    - topic: formalizacion
+      patterns: [formalizacion, formalizar, inicio de negocio, constitucion de empresa]

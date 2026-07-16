@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>SUNAT Orientacion</title>
+    <item>
+      <title>Detracciones</title>
+      <link>https://orientacion.sunat.gob.pe/detracciones</link>
+      <pubDate>2026-03-01</pubDate>
+    </item>
+    <item>
+      <title>Fraccionamiento</title>
+      <link>https://orientacion.sunat.gob.pe/fraccionamiento</link>
+    </item>
+  </channel>
+</rss>

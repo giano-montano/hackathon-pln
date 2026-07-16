@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://orientacion.sunat.gob.pe/ruc-empresas</loc></url>
+  <!-- Repetida a proposito: el descubrimiento debe devolverla una sola vez. -->
+  <url><loc>https://orientacion.sunat.gob.pe/ruc-personas</loc></url>
+  <sitemap><loc>https://orientacion.sunat.gob.pe/sitemap-anidado.xml</loc></sitemap>
+</urlset>
