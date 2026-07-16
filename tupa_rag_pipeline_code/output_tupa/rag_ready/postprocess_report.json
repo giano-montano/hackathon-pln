@@ -1,0 +1,664 @@
+{
+  "input_dir": "T:\\hackathon-pln\\tupa_rag_pipeline_code\\output_tupa",
+  "output_dir": "T:\\hackathon-pln\\tupa_rag_pipeline_code\\output_tupa\\rag_ready",
+  "configuration": {
+    "include_inactive_in_ready": false
+  },
+  "before": {
+    "procedure_count": 199,
+    "chunk_count": 1420,
+    "duplicate_procedure_ids": [],
+    "duplicate_chunk_ids": [],
+    "missing_parent_references": [],
+    "empty_page_content": [],
+    "empty_raw_text": [],
+    "heading_only_chunks_remaining": [
+      "tupa_178_requisitos_004",
+      "tupa_185_requisitos_004"
+    ],
+    "chunks_under_50_approx_tokens": [
+      {
+        "id": "tupa_1_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_1_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_2_recursos_001",
+        "tokens": 49,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_8_formularios_001",
+        "tokens": 42,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_8_a_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_12_resumen_administrativo_001",
+        "tokens": 46,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_12_recursos_001",
+        "tokens": 45,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_15_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_15_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_36_formularios_001",
+        "tokens": 45,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_37_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_42_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_43_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_45_formularios_001",
+        "tokens": 48,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_51_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_52_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_53_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_66_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_66_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_66_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_77_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_96_recursos_001",
+        "tokens": 47,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_132_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_139_resumen_administrativo_001",
+        "tokens": 45,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_139_recursos_001",
+        "tokens": 44,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_142_informacion_adicional_001",
+        "tokens": 49,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nALMACÉN LIBRE (DUTY FREE)"
+      },
+      {
+        "id": "tupa_147_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_148_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_151_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_153_formularios_001",
+        "tokens": 35,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_154_formularios_001",
+        "tokens": 42,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_156_formularios_001",
+        "tokens": 39,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_158_recursos_001",
+        "tokens": 40,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_159_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_160_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_160_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_161_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_161_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_163_formularios_001",
+        "tokens": 46,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_164_formularios_001",
+        "tokens": 40,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_175_informacion_adicional_001",
+        "tokens": 45,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nBASE LEGAL:"
+      },
+      {
+        "id": "tupa_servicio_2_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_servicio_2_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_servicio_2_informacion_adicional_001",
+        "tokens": 49,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nSERVICIO DE\nLABORATORIO\n(POR MUESTRA)"
+      },
+      {
+        "id": "tupa_servicio_4_formularios_001",
+        "tokens": 39,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_servicio_4_recursos_001",
+        "tokens": 44,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_178_requisitos_004",
+        "tokens": 37,
+        "content_type": "requisitos",
+        "raw_text": "REQUISITOS ESPECÍFICOS"
+      },
+      {
+        "id": "tupa_184_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_185_requisitos_004",
+        "tokens": 41,
+        "content_type": "requisitos",
+        "raw_text": "REQUISITOS ESPECÍFICOS"
+      },
+      {
+        "id": "tupa_185_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_186_formularios_001",
+        "tokens": 48,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_193_formularios_001",
+        "tokens": 45,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      }
+    ]
+  },
+  "transformations": {
+    "heading_only_merges": [
+      {
+        "removed_heading_chunk": "tupa_178_requisitos_004",
+        "merged_into": "tupa_178_requisitos_005"
+      },
+      {
+        "removed_heading_chunk": "tupa_185_requisitos_004",
+        "merged_into": "tupa_185_requisitos_005"
+      }
+    ],
+    "heading_only_merge_count": 2,
+    "active_procedure_count": 185,
+    "inactive_procedure_count": 14,
+    "active_chunk_count": 1400,
+    "inactive_chunk_count": 18
+  },
+  "after": {
+    "procedure_count": 185,
+    "chunk_count": 1400,
+    "duplicate_procedure_ids": [],
+    "duplicate_chunk_ids": [],
+    "missing_parent_references": [],
+    "empty_page_content": [],
+    "empty_raw_text": [],
+    "heading_only_chunks_remaining": [],
+    "chunks_under_50_approx_tokens": [
+      {
+        "id": "tupa_1_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_1_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_2_recursos_001",
+        "tokens": 49,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_8_formularios_001",
+        "tokens": 42,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_8_a_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_12_resumen_administrativo_001",
+        "tokens": 46,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_12_recursos_001",
+        "tokens": 45,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_15_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_15_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_36_formularios_001",
+        "tokens": 45,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_37_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_42_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_43_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_45_formularios_001",
+        "tokens": 48,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_51_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_52_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_53_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_66_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_66_resumen_administrativo_001",
+        "tokens": 49,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_66_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_77_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_96_recursos_001",
+        "tokens": 47,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_132_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_139_resumen_administrativo_001",
+        "tokens": 45,
+        "content_type": "resumen_administrativo",
+        "raw_text": "Derecho de tramitación / costo:\nGRATUITO\n\nCalificación:\nAutomático"
+      },
+      {
+        "id": "tupa_139_recursos_001",
+        "tokens": 44,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_142_informacion_adicional_001",
+        "tokens": 49,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nALMACÉN LIBRE (DUTY FREE)"
+      },
+      {
+        "id": "tupa_147_formularios_001",
+        "tokens": 44,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_148_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_151_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_153_formularios_001",
+        "tokens": 35,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_154_formularios_001",
+        "tokens": 42,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_156_formularios_001",
+        "tokens": 39,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_158_recursos_001",
+        "tokens": 40,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_159_formularios_001",
+        "tokens": 49,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_160_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_160_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_161_formularios_001",
+        "tokens": 43,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_161_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_163_formularios_001",
+        "tokens": 46,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_164_formularios_001",
+        "tokens": 40,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_175_informacion_adicional_001",
+        "tokens": 45,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nBASE LEGAL:"
+      },
+      {
+        "id": "tupa_servicio_2_formularios_001",
+        "tokens": 41,
+        "content_type": "formularios",
+        "raw_text": "NO APLICA"
+      },
+      {
+        "id": "tupa_servicio_2_recursos_001",
+        "tokens": 48,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_servicio_2_informacion_adicional_001",
+        "tokens": 49,
+        "content_type": "informacion_adicional",
+        "raw_text": "Información adicional de la denominación:\nSERVICIO DE\nLABORATORIO\n(POR MUESTRA)"
+      },
+      {
+        "id": "tupa_servicio_4_formularios_001",
+        "tokens": 39,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_servicio_4_recursos_001",
+        "tokens": 44,
+        "content_type": "recursos",
+        "raw_text": "Reconsideración:\nNO APLICA\n\nReclamo:\nNO APLICA\n\nApelación:\nNO APLICA"
+      },
+      {
+        "id": "tupa_184_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_185_formularios_001",
+        "tokens": 47,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_186_formularios_001",
+        "tokens": 48,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      },
+      {
+        "id": "tupa_193_formularios_001",
+        "tokens": 45,
+        "content_type": "formularios",
+        "raw_text": "SOLICITUD EN FORMATO LIBRE"
+      }
+    ]
+  },
+  "recommended_index_file": "T:\\hackathon-pln\\tupa_rag_pipeline_code\\output_tupa\\rag_ready\\chunks_ready.jsonl"
+}
